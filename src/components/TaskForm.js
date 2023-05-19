@@ -15,32 +15,35 @@ const TaskForm = ({ tasks, setTasks, selectedTask, updateTask }) => {
     }
   }, [selectedTask]);
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (selectedTask) {
-      const updatedTask = {
-        ...selectedTask,
-        title,
-        description,
-        dueDate,
-        status
-      };
-      updateTask(updatedTask);
-    } else {
-      const newTask = {
-        id: tasks.length + 1,
-        title,
-        description,
-        dueDate,
-        status
-      };
-      setTasks([...tasks, newTask]);
-    }
-    setTitle('');
-    setDescription('');
-    setDueDate('');
-    setStatus('to_do');
-  };
+const handleSubmit = e => {
+  e.preventDefault();
+  const today = new Date();
+  const taskDueDate = new Date(dueDate);
+  const status = taskDueDate < today ? 'overdue' : 'to_do';
+  if (selectedTask) {
+    const updatedTask = {
+      ...selectedTask,
+      title,
+      description,
+      dueDate,
+      status
+    };
+    updateTask(updatedTask);
+  } else {
+    const newTask = {
+      id: tasks.length + 1,
+      title,
+      description,
+      dueDate,
+      status
+    };
+    setTasks([...tasks, newTask]);
+  }
+  setTitle('');
+  setDescription('');
+  setDueDate('');
+  setStatus('to_do');
+};
 
   return (
     <form onSubmit={handleSubmit}>
